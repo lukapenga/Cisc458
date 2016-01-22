@@ -1,5 +1,7 @@
 {  PT scanner-parser pass  Ver. 1.08
 
+temp
+
   Date:  30 Jun 1980
 	 (revised 15 Dec 2015)
 
@@ -19,7 +21,7 @@
 		stdIdentifiers - PT keywords and predeclared identifiers
 
 		scanSsl, parseSsl - tables to drive the scanner and parser
-
+		
 		source - user program text
 
 		options - compiler toggle settings. Recognized options are:
@@ -1661,9 +1663,20 @@ program ScannerParser(output, stdIdentifiers, scanSsl, parseSsl, source,
 
     { Main program ScannerParser }
     begin
+
 	Initialize;
+	 
+	parseInputToken:= pNewLine;
+	newInputLine:= false;
+
+    while parseInputToken <> pEndFile do
+    	AcceptSyntaxToken;
+
+	{
 	Parser;
 	{ No sense running semantic phase if serious syntax errors found }
 	if errorCount > 0 then
 	    rewrite(parseStream {, NparseStream} );
+	    }
     end.  { ScannerParser }
+    
